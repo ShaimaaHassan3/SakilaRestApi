@@ -5,7 +5,7 @@ import com.myapi.dtos.StoreDto;
 import com.myapi.dtos.film.FilmDto;
 import com.myapi.services.InventoryService;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.*;
 
 import java.util.Set;
 
@@ -20,42 +20,52 @@ public class InventoryServices {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("inventories/{id}")
-    public InventoryDto getInventory(@PathParam("id") int inventoryId) {
-        return service.getInventory(inventoryId);
+    public Response getInventory(@PathParam("id") int inventoryId, @Context UriInfo uriInfo) {
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(service.getInventory(inventoryId)).link(self.getUri(), "self").build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("inventories/film/{id}")
-    public FilmDto getFilm(@PathParam("id") int inventoryId) {
-        return service.getFilm(inventoryId);
+    public Response getFilm(@PathParam("id") int inventoryId, @Context UriInfo uriInfo) {
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(service.getFilm(inventoryId)).link(self.getUri(), "self").build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("inventories")
-    public Set<InventoryDto> getAllInventory() {
-        return service.getAllInventory();
+    public Response getAllInventory(@Context UriInfo uriInfo) {
+        GenericEntity entity = new GenericEntity<Set<InventoryDto>>(service.getAllInventory()) {
+        };
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(entity).link(self.getUri(), "self").build();
+
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("inventories/store/{id}")
-    public StoreDto getStore(@PathParam("id") int inventoryId) {
-        return service.getStore(inventoryId);
+    public Response getStore(@PathParam("id") int inventoryId, @Context UriInfo uriInfo) {
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(service.getStore(inventoryId)).link(self.getUri(), "self").build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("inventory")
-    public InventoryDto addInventory(InventoryDto inventory) {
-        return service.addInventory(inventory);
+    public Response addInventory(InventoryDto inventory, @Context UriInfo uriInfo) {
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(service.addInventory(inventory)).link(self.getUri(), "self").build();
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("inventory")
-    public InventoryDto updateInventory(InventoryDto inventory) {
-        return service.updateInventory(inventory);
+    public Response updateInventory(InventoryDto inventory, @Context UriInfo uriInfo) {
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(service.updateInventory(inventory)).link(self.getUri(), "self").build();
+
     }
 }

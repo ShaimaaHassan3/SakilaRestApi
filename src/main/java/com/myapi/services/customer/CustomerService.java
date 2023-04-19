@@ -55,16 +55,17 @@ public class CustomerService {
         return modelMapper.map(customerRepo.updateCustomer(customer), CustomerDto.class);
     }
 
-    public void deleteCustomer(int id) {
+    public String deleteCustomer(int id) {
         Customer customer2 = customerRepo.getCustomerById(id);
 //        Customer customer = modelMapper.map(customerDto, Customer.class);
         customerRepo.deleteCustomer(customer2);
+        return "delete Successfully";
     }
 
     public Set<PaymentDto> getAllPayments(int customerId) {
         Type type = new TypeToken<Set<PaymentDto>>() {
         }.getType();
-        return modelMapper.map(customerRepo.getAllPayment(customerId),type);
+        return modelMapper.map(customerRepo.getAllPayment(customerId), type);
     }
 
 }
