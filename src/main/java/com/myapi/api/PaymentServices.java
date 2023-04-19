@@ -4,9 +4,10 @@ import com.myapi.dtos.StaffDto;
 import com.myapi.dtos.customer.CustomerDto;
 import com.myapi.dtos.customer.PaymentDto;
 import com.myapi.dtos.customer.RentalDto;
+import com.myapi.dtos.film.LanguageDto;
 import com.myapi.services.PaymentService;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.*;
 
 import java.util.Set;
 
@@ -21,64 +22,78 @@ public class PaymentServices {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("payments/{id}")
-    public PaymentDto getPayment(@PathParam("id") int paymentID) {
-        return service.getPaymentById(paymentID);
+    public Response getPayment(@PathParam("id") int paymentID, @Context UriInfo uriInfo) {
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(service.getPaymentById(paymentID)).link(self.getUri(), "self").build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("payments/customer/{id}")
-    public CustomerDto getCustomerPayment(@PathParam("id") int paymentID) {
-        return service.getCustomerPayment(paymentID);
+    public Response getCustomerPayment(@PathParam("id") int paymentID, @Context UriInfo uriInfo) {
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(service.getCustomerPayment(paymentID)).link(self.getUri(), "self").build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("payments")
-    public Set<PaymentDto> getAllPayments() {
-        return service.getAllPayment();
+    public Response getAllPayments(@Context UriInfo uriInfo) {
+        GenericEntity entity = new GenericEntity<Set<PaymentDto>>(service.getAllPayment()) {
+        };
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(entity).link(self.getUri(), "self").build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("payments/staff/{id}")
-    public StaffDto getStaffProcessedPayment(@PathParam("id") int paymentID) {
-        return service.getStaffProcessedPayment(paymentID);
+    public Response getStaffProcessedPayment(@PathParam("id") int paymentID, @Context UriInfo uriInfo) {
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(service.getStaffProcessedPayment(paymentID)).link(self.getUri(), "self").build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("payments/rental/{id}")
-    public RentalDto getRentalApplied(@PathParam("id") int paymentID) {
-        return service.getRentalApplied(paymentID);
+    public Response getRentalApplied(@PathParam("id") int paymentID, @Context UriInfo uriInfo) {
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(service.getRentalApplied(paymentID)).link(self.getUri(), "self").build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("payment")
-    public PaymentDto addPayment(PaymentDto paymentDto) {
-        return service.addPayment(paymentDto);
+    public Response addPayment(PaymentDto paymentDto, @Context UriInfo uriInfo) {
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(service.addPayment(paymentDto)).link(self.getUri(), "self").build();
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("payment")
-    public PaymentDto updatePayment(PaymentDto paymentDto) {
-        return service.updatePayment(paymentDto);
+    public Response updatePayment(PaymentDto paymentDto, @Context UriInfo uriInfo) {
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(service.updatePayment(paymentDto)).link(self.getUri(), "self").build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("payments/last/customer/{id}")
-    public PaymentDto getLastPayment(@PathParam("id") int customerId) {
-        return service.getLastPayment(customerId);
+    public Response getLastPayment(@PathParam("id") int customerId, @Context UriInfo uriInfo) {
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(service.getLastPayment(customerId)).link(self.getUri(), "self").build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("payments/amount/{amount}")
-    public Set<PaymentDto> getPaymentWithAmount(@PathParam("amount") int customerId) {
-        return service.getPaymentWithAmount(customerId);
+    public Response getPaymentWithAmount(@PathParam("amount") int customerId, @Context UriInfo uriInfo) {
+        GenericEntity entity = new GenericEntity<Set<PaymentDto>>(service.getPaymentWithAmount(customerId)) {
+        };
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(entity).link(self.getUri(), "self").build();
+
     }
 
 }
