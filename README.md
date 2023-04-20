@@ -7,7 +7,7 @@ The Sakila database is often used as a sample database for learning SQL and data
 This API for the Sakila Sample Database in MySQL, providing users to perform CRUD operation on any table  in the database.
 
 # Technologies
-Java
+#Java
 
 #Apache Tomcat
 
